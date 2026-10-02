@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>System Detail — Facility Technician Checklist</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="brand">FACILITY TECHNICIAN CHECKLIST</div>
+      <div class="tagline" id="page-tagline">Detail of pending issues</div>
+    </div>
+    <div class="context">
+      <div id="system-name-top">System</div>
+      <div class="sub">Outstanding</div>
+    </div>
+  </header>
+  <div class="session-bar" id="session-bar"></div>
+
+  <main>
+    <a class="back-link" href="index.html">&larr; Back to Dashboard</a>
+
+    <div class="detail-header">
+      <h1 id="system-name">System name</h1>
+    </div>
+    <div class="sub" id="system-sub">Loading…</div>
+
+    <div class="status-summary-chips" id="status-summary"></div>
+
+    <button type="button" id="toggle-add-form" class="btn-primary edit-only">+ Add New Item</button>
+
+    <form id="add-item-form" class="add-item-form hidden edit-only">
+      <div class="form-grid">
+        <label class="form-field">
+          <span>Title *</span>
+          <input type="text" id="f-title" required placeholder="e.g. Sprinkler valve leaking" />
+        </label>
+        <label class="form-field">
+          <span>Status</span>
+          <select id="f-status">
+            <option value="Pending" selected>Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Overdue">Overdue</option>
+          </select>
+        </label>
+        <label class="form-field span-2">
+          <span>Description</span>
+          <textarea id="f-description" rows="2" placeholder="What happened, in plain language"></textarea>
+        </label>
+        <label class="form-field">
+          <span>Location</span>
+          <input type="text" id="f-location" placeholder="e.g. Level 2 corridor" />
+        </label>
+        <label class="form-field">
+          <span>Reported by</span>
+          <input type="text" id="f-reported" placeholder="e.g. Ahmad, just now" />
+        </label>
+        <label class="form-field">
+          <span>Acknowledged by</span>
+          <input type="text" id="f-ackby" placeholder="Leave blank if not yet acknowledged" />
+        </label>
+        <label class="form-field">
+          <span>Next step</span>
+          <input type="text" id="f-nextstep" placeholder="e.g. Order replacement part" />
+        </label>
+        <label class="form-field span-2">
+          <span>Photo</span>
+          <input type="file" id="f-photo" accept="image/*" />
+        </label>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">Add Item</button>
+        <button type="button" id="cancel-add-form" class="btn-secondary">Cancel</button>
+      </div>
+    </form>
+
+    <div id="issue-list">
+      <!-- Issue cards rendered by js/detail.js -->
+    </div>
+
+    <a class="back-link bottom" href="index.html">&larr; Back to Dashboard</a>
+
+    <div class="footnote">Facility Technician Checklist — prototype view · sample data</div>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script>requireLogin();</script>
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/comments.js"></script>
+  <script src="js/detail.js"></script>
+</body>
+</html>

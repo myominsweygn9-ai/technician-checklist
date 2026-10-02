@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Facility Technician Checklist — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="brand">FACILITY TECHNICIAN CHECKLIST</div>
+      <div class="tagline">Logistics Facility &nbsp;|&nbsp; Building Technician Team</div>
+    </div>
+    <div class="context">
+      <div id="today-date">Dashboard</div>
+      <div class="sub">Click a system to see its pending items</div>
+    </div>
+  </header>
+  <div class="session-bar" id="session-bar"></div>
+
+  <main>
+    <div class="pending-banner">
+      <div class="count-block">
+        <div class="label">Total Pending</div>
+        <div class="count" id="total-pending">--</div>
+      </div>
+      <div class="hint">
+        Click any system card to open its pending items — each one shows a photo,
+        the issue, the location, when it happened, and who acknowledged it.
+      </div>
+    </div>
+
+    <div class="section-label-row">
+      <div class="section-label">SYSTEM STATUS</div>
+      <button type="button" id="add-system-btn" class="btn-primary edit-only">+ Add System</button>
+    </div>
+    <div class="system-grid" id="system-grid">
+      <!-- Cards are rendered by js/dashboard.js from js/data.js -->
+    </div>
+
+    <!-- Add / Edit System modal (admin only) -->
+    <div id="system-modal-backdrop" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <h3 id="system-modal-title">Add System</h3>
+        <form id="system-form">
+          <input type="hidden" id="sf-key" />
+          <label class="form-field">
+            <span>System name *</span>
+            <input type="text" id="sf-name" required placeholder="e.g. Rooftop Solar" />
+          </label>
+          <label class="form-field">
+            <span>Components (subtitle)</span>
+            <input type="text" id="sf-sub" placeholder="e.g. Panels, Inverter, Monitoring" />
+          </label>
+          <div class="form-grid">
+            <label class="form-field">
+              <span>Total recurring tasks</span>
+              <input type="number" id="sf-total" min="0" value="1" />
+            </label>
+            <label class="form-field">
+              <span>Done today</span>
+              <input type="number" id="sf-done" min="0" value="0" />
+            </label>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Save System</button>
+            <button type="button" id="system-modal-cancel" class="btn-secondary">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="footnote">Facility Technician Checklist — prototype view · sample data</div>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script>requireLogin();</script>
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/comments.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
