@@ -240,6 +240,7 @@ function setupDeleteHandling() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  renderCompanyName();
   renderSessionBar();
   renderDetail();
   setupAddItemForm();

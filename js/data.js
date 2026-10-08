@@ -1,4 +1,19 @@
 /**
+ * COMPANY_NAME
+ * Shown centered in the header, between the app name and the date/
+ * login info, on every page. Change the text below to your own
+ * company name — nothing else needs to change.
+ */
+const COMPANY_NAME = "Your Company Name Pte Ltd";
+
+// Fills in the centered company name in the header. Called on every
+// page once the DOM is ready.
+function renderCompanyName() {
+  const el = document.getElementById("company-name");
+  if (el) el.textContent = COMPANY_NAME;
+}
+
+/**
  * data.js
  * ------------------------------------------------------------------
  * Single source of truth for every system and its pending items.
@@ -43,6 +58,7 @@ const SAMPLE_PHOTO =
 
 const SYSTEMS = {
   security: {
+    image: "images/security.jpg",
     name: "Security Systems",
     sub: "CCTV, Access Control, Alarm Monitoring, Carpark",
     totalTasks: 6,
@@ -85,6 +101,7 @@ const SYSTEMS = {
   },
 
   landscaping: {
+    image: "images/landscaping.jpg",
     name: "Landscaping",
     sub: "Indoor & Outdoor Plants, Irrigation System",
     totalTasks: 4,
@@ -93,6 +110,7 @@ const SYSTEMS = {
   },
 
   lifting: {
+    image: "images/lifting.jpg",
     name: "Lifting System",
     sub: "Passenger Lift, Evacuation Lift, Goods Lift",
     totalTasks: 4,
@@ -101,6 +119,7 @@ const SYSTEMS = {
   },
 
   aircon: {
+    image: "images/aircon.jpg",
     name: "Office Air-Conditioning",
     sub: "FCU, Ceiling Cassette Aircon",
     totalTasks: 6,
@@ -109,6 +128,7 @@ const SYSTEMS = {
   },
 
   coldroom: {
+    image: "images/coldroom.jpg",
     name: "Cold Room System",
     sub: "Freezer Room, Chiller Room, Temperature Monitoring",
     totalTasks: 4,
@@ -117,6 +137,7 @@ const SYSTEMS = {
   },
 
   dehumidifier: {
+    image: "images/dehumidifier.jpg",
     name: "Dehumidifier System",
     sub: "Humidity Control, Equipment Maintenance",
     totalTasks: 2,
@@ -125,6 +146,7 @@ const SYSTEMS = {
   },
 
   electrical: {
+    image: "images/electrical.jpg",
     name: "Electrical System",
     sub: "Transformer, Switchboards, Generator, UPS",
     totalTasks: 5,
@@ -133,6 +155,7 @@ const SYSTEMS = {
   },
 
   plumbing: {
+    image: "images/plumbing.jpg",
     name: "Plumbing & Sanitary",
     sub: "Water Supply, Drainage Pipe, Toilet",
     totalTasks: 4,
@@ -141,6 +164,7 @@ const SYSTEMS = {
   },
 
   fire: {
+    image: "images/fire.jpg",
     name: "Fire Protection",
     sub: "Fire Alarm, Sprinklers, Hose Reels, Fire Extinguishers",
     totalTasks: 5,
@@ -149,6 +173,7 @@ const SYSTEMS = {
   },
 
   dock: {
+    image: "images/dock.jpg",
     name: "Dock Equipment",
     sub: "Dock Levellers, Dock Shelters, Loading Bays",
     totalTasks: 4,
@@ -157,6 +182,7 @@ const SYSTEMS = {
   },
 
   reefer: {
+    image: "images/reefer.jpg",
     name: "Reefer Plug System",
     sub: "Reefer Power Points Monitoring",
     totalTasks: 3,
@@ -165,6 +191,7 @@ const SYSTEMS = {
   },
 
   doors: {
+    image: "images/doors.jpg",
     name: "Entry & Exit Doors",
     sub: "Automatic Door, Emergency Door Access Control",
     totalTasks: 2,
@@ -173,6 +200,7 @@ const SYSTEMS = {
   },
 
   general: {
+    image: "images/general.jpg",
     name: "Building General",
     sub: "Building Fabric, Lighting, Housekeeping, Coordination, Repairs",
     totalTasks: 3,
@@ -181,6 +209,7 @@ const SYSTEMS = {
   },
 
   generator: {
+    image: "images/generator.jpg",
     name: "Generator Maintenance",
     sub: "Monthly Service and Run Test",
     totalTasks: 1,

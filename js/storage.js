@@ -28,6 +28,7 @@ function snapshotData() {
     systems[key] = {
       name: s.name,
       sub: s.sub,
+      image: s.image,
       totalTasks: s.totalTasks,
       doneToday: s.doneToday,
       items: s.items,

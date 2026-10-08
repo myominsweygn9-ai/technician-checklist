@@ -67,28 +67,34 @@ function renderDashboard() {
       window.location.href = `detail.html?system=${key}`;
     });
 
+    const imgSrc = sys.image || "images/default.jpg";
+
     card.innerHTML = `
-      <div class="card-icons edit-only">
-        <button type="button" class="icon-btn edit-system-btn" data-key="${key}" title="Edit system">✎</button>
-        <button type="button" class="icon-btn danger delete-system-btn" data-key="${key}" title="Delete system">🗑</button>
+      <div class="card-thumb" style="background-image:url('${imgSrc}')">
+        <div class="card-icons edit-only">
+          <button type="button" class="icon-btn edit-system-btn" data-key="${key}" title="Edit system">✎</button>
+          <button type="button" class="icon-btn danger delete-system-btn" data-key="${key}" title="Delete system">🗑</button>
+        </div>
       </div>
-      <div class="head">
-        <span class="dot" style="background:${color}"></span>
-        <span class="name">${sys.name}</span>
-      </div>
-      <div class="sub">${sys.sub}</div>
-      <div class="progress-track">
-        <div class="progress-fill" style="width:${Math.round(
-          doneFraction * 100
-        )}%; background:${color}"></div>
-      </div>
-      <div class="row-bottom">
-        <span class="status-text ${pending === 0 ? "clear" : ""}" style="color:${
+      <div class="card-body">
+        <div class="head">
+          <span class="dot" style="background:${color}"></span>
+          <span class="name">${sys.name}</span>
+        </div>
+        <div class="sub">${sys.sub}</div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${Math.round(
+            doneFraction * 100
+          )}%; background:${color}"></div>
+        </div>
+        <div class="row-bottom">
+          <span class="status-text ${pending === 0 ? "clear" : ""}" style="color:${
       pending === 0 ? "" : color
     }">
-          ${pending === 0 ? "All clear" : `${pending} pending`}
-        </span>
-        <span class="done-count">${sys.doneToday} / ${sys.totalTasks} done</span>
+            ${pending === 0 ? "All clear" : `${pending} pending`}
+          </span>
+          <span class="done-count">${sys.doneToday} / ${sys.totalTasks} done</span>
+        </div>
       </div>
     `;
 
@@ -172,7 +178,14 @@ function setupSystemManagement() {
     } else {
       // Adding: generate a unique key and append to the end of the order.
       const newKey = slugifySystemKey(name);
-      SYSTEMS[newKey] = { name, sub, totalTasks, doneToday, items: [] };
+      SYSTEMS[newKey] = {
+        name,
+        sub,
+        totalTasks,
+        doneToday,
+        items: [],
+        image: "images/default.jpg",
+      };
       SYSTEM_ORDER.push(newKey);
     }
 
@@ -217,6 +230,7 @@ function setupSystemManagement() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  renderCompanyName();
   renderSessionBar();
   renderDashboard();
   setupSystemManagement();
