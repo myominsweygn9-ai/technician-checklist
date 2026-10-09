@@ -719,6 +719,15 @@ main {
   color: #fff;
 }
 
+/* On a narrow viewport — a phone, or a desktop browser window
+   shrunk small — center it instead of pinning it to the right,
+   matching how the header above it also re-centers. */
+@media (max-width: 720px) {
+  .session-bar {
+    text-align: center;
+  }
+}
+
 /* Viewer accounts get the view-only class on <body>, which hides
    every edit-only control site-wide. */
 body.view-only .edit-only {
