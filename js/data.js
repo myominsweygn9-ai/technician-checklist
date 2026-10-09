@@ -247,3 +247,21 @@ const SYSTEM_ORDER = [
   "general",
   "generator",
 ];
+
+/**
+ * DEFAULT_SYSTEM_IMAGES
+ * ------------------------------------------------------------------
+ * A snapshot of each system's starting image path, taken right here
+ * before anything else can touch SYSTEMS. A visitor's browser may
+ * have saved data from before a field like "image" existed (saved
+ * locally by storage.js) — when that happens, the saved copy doesn't
+ * have that field, and without this snapshot every card would fall
+ * back to the plain default icon forever on that device, even after
+ * this site is updated. storage.js uses this to patch missing fields
+ * back in automatically, so visitors never need to clear anything.
+ * ------------------------------------------------------------------
+ */
+const DEFAULT_SYSTEM_IMAGES = {};
+SYSTEM_ORDER.forEach((key) => {
+  DEFAULT_SYSTEM_IMAGES[key] = SYSTEMS[key].image;
+});
