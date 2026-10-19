@@ -229,10 +229,19 @@ function setupSystemManagement() {
   });
 }
 
+function setupAllSystemsExport() {
+  const btn = document.getElementById("export-all-btn");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    exportAllSystemsReport();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderCompanyName();
   renderSessionBar();
   renderDashboard();
   setupSystemManagement();
+  setupAllSystemsExport();
   initCommentWidget();
 });
