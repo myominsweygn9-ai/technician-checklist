@@ -30,7 +30,10 @@
 
     <div class="status-summary-chips" id="status-summary"></div>
 
-    <button type="button" id="toggle-add-form" class="btn-primary edit-only">+ Add New Item</button>
+    <div class="detail-actions">
+      <button type="button" id="toggle-add-form" class="btn-primary edit-only">+ Add New Item</button>
+      <button type="button" id="export-report-btn" class="btn-secondary">⬇ Download Report (Word)</button>
+    </div>
 
     <form id="add-item-form" class="add-item-form hidden edit-only">
       <div class="form-grid">
@@ -91,6 +94,7 @@
   <script src="js/data.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/comments.js"></script>
+  <script src="js/report.js"></script>
   <script src="js/detail.js"></script>
 </body>
 </html>

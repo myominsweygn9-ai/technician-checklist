@@ -442,6 +442,13 @@ main {
   background: #eef2f7;
 }
 
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+}
+
 /* ---------- Add-item form ---------- */
 
 .add-item-form {

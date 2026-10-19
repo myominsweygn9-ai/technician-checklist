@@ -239,11 +239,20 @@ function setupDeleteHandling() {
   });
 }
 
+function setupReportExport() {
+  const btn = document.getElementById("export-report-btn");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    exportSystemReport(getCurrentSystemKey());
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderCompanyName();
   renderSessionBar();
   renderDetail();
   setupAddItemForm();
   setupDeleteHandling();
+  setupReportExport();
   initCommentWidget();
 });
