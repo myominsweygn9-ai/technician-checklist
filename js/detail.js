@@ -371,4 +371,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setupEditHandling();
   setupReportExport();
   initCommentWidget();
+
+  if (typeof startCloudSync === "function") {
+    startCloudSync(renderDetail);
+  }
 });

@@ -56,9 +56,6 @@ function renderDashboard() {
     const pending = countPending(sys.items);
     const status = worstStatus(sys.items);
     const color = STATUS_COLOR[status];
-    const doneFraction = sys.totalTasks
-      ? sys.doneToday / sys.totalTasks
-      : 0;
 
     const card = document.createElement("div");
     card.className = "system-card";
@@ -82,18 +79,12 @@ function renderDashboard() {
           <span class="name">${sys.name}</span>
         </div>
         <div class="sub">${sys.sub}</div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width:${Math.round(
-            doneFraction * 100
-          )}%; background:${color}"></div>
-        </div>
         <div class="row-bottom">
           <span class="status-text ${pending === 0 ? "clear" : ""}" style="color:${
       pending === 0 ? "" : color
     }">
             ${pending === 0 ? "All clear" : `${pending} pending`}
           </span>
-          <span class="done-count">${sys.doneToday} / ${sys.totalTasks} done</span>
         </div>
       </div>
     `;
@@ -112,8 +103,6 @@ function openSystemModal(key) {
   const keyField = document.getElementById("sf-key");
   const nameField = document.getElementById("sf-name");
   const subField = document.getElementById("sf-sub");
-  const totalField = document.getElementById("sf-total");
-  const doneField = document.getElementById("sf-done");
 
   if (key && SYSTEMS[key]) {
     const s = SYSTEMS[key];
@@ -121,15 +110,11 @@ function openSystemModal(key) {
     keyField.value = key;
     nameField.value = s.name;
     subField.value = s.sub;
-    totalField.value = s.totalTasks;
-    doneField.value = s.doneToday;
   } else {
     title.textContent = "Add System";
     keyField.value = "";
     nameField.value = "";
     subField.value = "";
-    totalField.value = 1;
-    doneField.value = 0;
   }
 
   backdrop.classList.remove("hidden");
@@ -163,26 +148,16 @@ function setupSystemManagement() {
     const name = document.getElementById("sf-name").value.trim();
     if (!name) return;
     const sub = document.getElementById("sf-sub").value.trim();
-    const totalTasks = Math.max(
-      0,
-      parseInt(document.getElementById("sf-total").value, 10) || 0
-    );
-    const doneToday = Math.min(
-      totalTasks,
-      Math.max(0, parseInt(document.getElementById("sf-done").value, 10) || 0)
-    );
 
     if (existingKey && SYSTEMS[existingKey]) {
       // Editing: keep the same key and items, update the rest.
-      Object.assign(SYSTEMS[existingKey], { name, sub, totalTasks, doneToday });
+      Object.assign(SYSTEMS[existingKey], { name, sub });
     } else {
       // Adding: generate a unique key and append to the end of the order.
       const newKey = slugifySystemKey(name);
       SYSTEMS[newKey] = {
         name,
         sub,
-        totalTasks,
-        doneToday,
         items: [],
         image: "images/default.jpg",
       };
@@ -244,4 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSystemManagement();
   setupAllSystemsExport();
   initCommentWidget();
+
+  if (typeof startCloudSync === "function") {
+    startCloudSync(renderDashboard);
+  }
 });

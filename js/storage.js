@@ -43,6 +43,14 @@ function saveDataToStorage() {
   } catch (e) {
     console.error("Could not save to browser storage:", e);
   }
+
+  // If cloud.js has set up real-time sync, every save also goes up to
+  // the shared cloud database so other devices pick it up. If cloud
+  // sync isn't configured, this function doesn't exist and nothing
+  // changes — the site just keeps working per-device as before.
+  if (typeof pushSnapshotToCloud === "function") {
+    pushSnapshotToCloud();
+  }
 }
 
 function loadDataFromStorage() {
@@ -74,6 +82,19 @@ function loadDataFromStorage() {
           .slice(2, 7)}`;
       }
     });
+  });
+
+  // Backfill any field a visitor's saved copy predates (currently
+  // just "image" — added after some browsers had already saved data
+  // without it). Add future new fields here the same way, so an
+  // older saved copy on someone's device keeps picking up defaults
+  // for whatever it's missing, without them ever needing to clear
+  // their browser data.
+  SYSTEM_ORDER.forEach((key) => {
+    const s = SYSTEMS[key];
+    if (!s.image) {
+      s.image = DEFAULT_SYSTEM_IMAGES[key] || "images/default.jpg";
+    }
   });
 
   saveDataToStorage();

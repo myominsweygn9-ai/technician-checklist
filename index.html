@@ -58,16 +58,6 @@
             <span>Components (subtitle)</span>
             <input type="text" id="sf-sub" placeholder="e.g. Panels, Inverter, Monitoring" />
           </label>
-          <div class="form-grid">
-            <label class="form-field">
-              <span>Total recurring tasks</span>
-              <input type="number" id="sf-total" min="0" value="1" />
-            </label>
-            <label class="form-field">
-              <span>Done today</span>
-              <input type="number" id="sf-done" min="0" value="0" />
-            </label>
-          </div>
           <div class="form-actions">
             <button type="submit" class="btn-primary">Save System</button>
             <button type="button" id="system-modal-cancel" class="btn-secondary">Cancel</button>
@@ -79,10 +69,13 @@
     <div class="footnote">Facility Technician Checklist — prototype view · sample data</div>
   </main>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="js/auth.js"></script>
   <script>requireLogin();</script>
   <script src="js/data.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/cloud.js"></script>
   <script src="js/comments.js"></script>
   <script src="js/report.js"></script>
   <script src="js/dashboard.js"></script>
