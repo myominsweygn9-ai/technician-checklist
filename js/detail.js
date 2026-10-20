@@ -58,7 +58,10 @@ function renderIssueCard(item) {
         </div>
         <div class="next-step">
           <span><strong>Next step:</strong> ${item.nextStep}</span>
-          <button type="button" class="delete-btn edit-only" data-id="${item.id}">Delete</button>
+          <span class="item-actions edit-only">
+            <button type="button" class="edit-item-btn" data-id="${item.id}">Edit</button>
+            <button type="button" class="delete-btn" data-id="${item.id}">Delete</button>
+          </span>
         </div>
       </div>
     </div>
@@ -137,6 +140,49 @@ function getCurrentSystemKey() {
   return new URLSearchParams(window.location.search).get("system");
 }
 
+/**
+ * Edit mode
+ * ------------------------------------------------------------------
+ * The same "+ Add New Item" form doubles as the edit form. Clicking
+ * "Edit" on a card fills the form with that item's current values and
+ * flips a flag (editingItemId) so Save writes back into the existing
+ * item instead of creating a new one. This is what lets an admin fix
+ * a status, acknowledged-by name, or reporter name after the fact,
+ * instead of having to delete and re-add the whole item.
+ * ------------------------------------------------------------------
+ */
+let editingItemId = null;
+
+function enterEditMode(item) {
+  editingItemId = item.id;
+
+  document.getElementById("f-title").value = item.title || "";
+  document.getElementById("f-status").value = item.status || "Pending";
+  document.getElementById("f-description").value = item.description || "";
+  document.getElementById("f-location").value = item.location || "";
+  document.getElementById("f-reported").value = item.reported || "";
+  document.getElementById("f-ackby").value = item.ackBy || "";
+  document.getElementById("f-nextstep").value = item.nextStep || "";
+  // Photo can't be pre-filled into a file input (browser restriction);
+  // the form leaves it blank and Save keeps the existing photo unless
+  // a new one is chosen — see the hint text next to that field.
+
+  document.getElementById("item-form-submit").textContent = "Save Changes";
+  document.getElementById("edit-mode-title").textContent = item.title;
+  document.getElementById("edit-mode-note").classList.remove("hidden");
+
+  const form = document.getElementById("add-item-form");
+  form.classList.remove("hidden");
+  form.scrollIntoView({ behavior: "smooth", block: "center" });
+  document.getElementById("f-title").focus();
+}
+
+function exitEditMode() {
+  editingItemId = null;
+  document.getElementById("item-form-submit").textContent = "Add Item";
+  document.getElementById("edit-mode-note").classList.add("hidden");
+}
+
 function readPhotoFile(fileInput) {
   return new Promise((resolve) => {
     const file = fileInput.files && fileInput.files[0];
@@ -154,12 +200,19 @@ function readPhotoFile(fileInput) {
 function setupAddItemForm() {
   const toggleBtn = document.getElementById("toggle-add-form");
   const cancelBtn = document.getElementById("cancel-add-form");
+  const cancelEditLink = document.getElementById("cancel-edit-link");
   const form = document.getElementById("add-item-form");
   if (!toggleBtn || !form) return; // system not found — no form to wire up
 
   toggleBtn.addEventListener("click", () => {
+    // Opened from the "+ Add New Item" button — always a fresh blank
+    // form, even if an edit was left open.
+    if (editingItemId) exitEditMode();
+    const willShow = form.classList.contains("hidden");
     form.classList.toggle("hidden");
-    if (!form.classList.contains("hidden")) {
+    if (willShow) {
+      form.reset();
+      document.getElementById("f-status").value = "Pending";
       document.getElementById("f-title").focus();
     }
   });
@@ -167,6 +220,13 @@ function setupAddItemForm() {
   cancelBtn.addEventListener("click", () => {
     form.reset();
     form.classList.add("hidden");
+    exitEditMode();
+  });
+
+  cancelEditLink.addEventListener("click", () => {
+    form.reset();
+    form.classList.add("hidden");
+    exitEditMode();
   });
 
   form.addEventListener("submit", async (e) => {
@@ -181,6 +241,35 @@ function setupAddItemForm() {
     if (!title) return;
 
     const photoDataUrl = await readPhotoFile(document.getElementById("f-photo"));
+
+    if (editingItemId) {
+      const item = sys.items.find((i) => i.id === editingItemId);
+      if (item) {
+        item.title = title;
+        item.status = document.getElementById("f-status").value;
+        item.description = document.getElementById("f-description").value.trim();
+        item.location = document.getElementById("f-location").value.trim() || "—";
+        item.reported =
+          document.getElementById("f-reported").value.trim() ||
+          item.reported ||
+          "Just now";
+        item.ackBy = document.getElementById("f-ackby").value.trim() || null;
+        item.nextStep =
+          document.getElementById("f-nextstep").value.trim() ||
+          "To be assigned";
+        // Only replace the photo if the admin chose a new one — leaving
+        // the field blank keeps whatever photo the item already had.
+        if (photoDataUrl) item.photo = photoDataUrl;
+
+        saveDataToStorage();
+      }
+
+      exitEditMode();
+      form.reset();
+      form.classList.add("hidden");
+      renderDetail();
+      return;
+    }
 
     const newItem = {
       id: `${key}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -205,6 +294,32 @@ function setupAddItemForm() {
     form.reset();
     form.classList.add("hidden");
     renderDetail();
+  });
+}
+
+/**
+ * Edit button handling
+ * ------------------------------------------------------------------
+ * One delegated listener on the whole list, same pattern as delete.
+ * ------------------------------------------------------------------
+ */
+function setupEditHandling() {
+  const list = document.getElementById("issue-list");
+  if (!list) return;
+
+  list.addEventListener("click", (e) => {
+    const btn = e.target.closest(".edit-item-btn");
+    if (!btn) return;
+    if (!isAdmin()) return;
+
+    const key = getCurrentSystemKey();
+    const sys = SYSTEMS[key];
+    if (!sys) return;
+
+    const item = sys.items.find((i) => i.id === btn.dataset.id);
+    if (!item) return;
+
+    enterEditMode(item);
   });
 }
 
@@ -253,6 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderDetail();
   setupAddItemForm();
   setupDeleteHandling();
+  setupEditHandling();
   setupReportExport();
   initCommentWidget();
 });

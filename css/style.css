@@ -649,20 +649,67 @@ main {
   color: var(--ink);
 }
 
-.delete-btn {
+.delete-btn,
+.edit-item-btn {
   flex: none;
   background: none;
   border: 1px solid var(--line);
-  color: var(--red);
   font-size: 11.5px;
   font-weight: 700;
   padding: 5px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
+.delete-btn {
+  color: var(--red);
+}
 .delete-btn:hover {
   background: #fbe9e9;
   border-color: var(--red);
+}
+.edit-item-btn {
+  color: var(--blue);
+  margin-right: 6px;
+}
+.edit-item-btn:hover {
+  background: #eaf1fd;
+  border-color: var(--blue);
+}
+.next-step .item-actions {
+  display: flex;
+  flex: none;
+}
+
+.edit-mode-note {
+  background: #fff6e0;
+  border: 1px solid #f0d99a;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.edit-mode-note.hidden {
+  display: none;
+}
+.field-hint {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.edit-mode-note .link-btn {
+  background: none;
+  border: none;
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
 }
 
 /* ---------- Status chip ---------- */
