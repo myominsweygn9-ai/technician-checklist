@@ -14,42 +14,57 @@
 
       <form id="login-form">
         <label class="form-field">
-          <span>User ID</span>
-          <input type="text" id="l-userid" autocomplete="username" required />
+          <span>Email</span>
+          <input type="email" id="l-userid" autocomplete="username" required />
         </label>
         <label class="form-field">
           <span>Password</span>
           <input type="password" id="l-password" autocomplete="current-password" required />
         </label>
-        <p id="login-error" class="login-error hidden">Incorrect User ID or password.</p>
+        <p id="login-error" class="login-error hidden">Incorrect email or password.</p>
         <button type="submit" class="btn-primary login-btn">Sign In</button>
       </form>
     </div>
   </div>
 
-  <script src="js/auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
   <script>
     const form = document.getElementById("login-form");
     const errorMsg = document.getElementById("login-error");
+    const submitBtn = form.querySelector("button[type=submit]");
+
+    // If someone is already signed in (e.g. this tab was left open),
+    // skip straight past the login form.
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const params = new URLSearchParams(window.location.search);
+        window.location.href = params.get("next") || "index.html";
+      }
+    });
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const userId = document.getElementById("l-userid").value.trim();
+      errorMsg.classList.add("hidden");
+      const email = document.getElementById("l-userid").value.trim();
       const password = document.getElementById("l-password").value;
-      const user = USERS[userId];
 
-      if (!user || user.password !== password) {
-        errorMsg.classList.remove("hidden");
-        return;
-      }
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Signing in…";
 
-      localStorage.setItem(
-        SESSION_KEY,
-        JSON.stringify({ userId, role: user.role, label: user.label })
-      );
-
-      const params = new URLSearchParams(window.location.search);
-      window.location.href = params.get("next") || "index.html";
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          const params = new URLSearchParams(window.location.search);
+          window.location.href = params.get("next") || "index.html";
+        })
+        .catch(() => {
+          errorMsg.classList.remove("hidden");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Sign In";
+        });
     });
   </script>
 </body>

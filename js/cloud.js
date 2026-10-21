@@ -1,17 +1,16 @@
 /**
  * cloud.js
  * ------------------------------------------------------------------
- * OPTIONAL real-time sync, using a free Firebase Firestore database,
- * so every device sees the SAME data instead of each device keeping
- * its own separate localStorage copy.
+ * Real-time sync, using your Firebase Firestore database, so every
+ * device sees the SAME data instead of each device keeping its own
+ * separate localStorage copy.
  *
- * This file does nothing until FIREBASE_CONFIG below is filled in
- * with your own free Firebase project's details — until then, the
- * site works exactly as before (each device on its own). See the
- * setup steps given in chat for how to create that free project and
- * get these six values; it only needs doing once.
+ * Needs firebase-init.js (sets up the connection to your project)
+ * loaded first, and needs the signed-in person to have passed
+ * requireLogin() in auth.js already — the Firestore security rules
+ * require a signed-in user, and only an Admin's writes are accepted.
  *
- * How it works once configured:
+ * How it works:
  *   - All the data (same shape as what's saved to localStorage) lives
  *     in one shared Firestore document.
  *   - Every device listens for changes to that document in real time.
@@ -24,25 +23,13 @@
  * ------------------------------------------------------------------
  */
 
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDGyujcfpwQQQW2nlky1K4I1xVBumKFe_0",
-  authDomain: "technician-checklist-c68eb.firebaseapp.com",
-  projectId: "technician-checklist-c68eb",
-  storageBucket: "technician-checklist-c68eb.firebasestorage.app",
-  messagingSenderId: "744866633968",
-  appId: "1:744866633968:web:778525233639b349b4ca35",
-};
-
-const CLOUD_ENABLED = FIREBASE_CONFIG.apiKey !== "PASTE_YOUR_API_KEY_HERE";
-
 let cloudDocRef = null;
 // Set right before we write data that only just arrived FROM the cloud,
 // so we don't immediately echo it straight back up again.
 let suppressNextCloudPush = false;
 
-if (CLOUD_ENABLED && typeof firebase !== "undefined") {
+if (typeof firebase !== "undefined" && firebase.apps.length) {
   try {
-    firebase.initializeApp(FIREBASE_CONFIG);
     const db = firebase.firestore();
     cloudDocRef = db.collection("technician-checklist").doc("data");
   } catch (e) {

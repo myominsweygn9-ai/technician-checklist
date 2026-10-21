@@ -163,12 +163,11 @@ function initAdminCommentsBell() {
 }
 
 function initCommentWidget() {
-  const session = getSession();
-  if (!session) return;
+  if (!currentUserEmail) return; // requireLogin() hasn't resolved yet
 
-  if (session.role === "admin") {
+  if (isAdmin()) {
     initAdminCommentsBell();
   } else {
-    initViewerCommentBox(session);
+    initViewerCommentBox({ label: currentUserEmail });
   }
 }

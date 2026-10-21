@@ -212,7 +212,11 @@ function setupAllSystemsExport() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  // Waits for a real signed-in Firebase user (and their role) before
+  // showing anything — redirects to login.html if nobody is signed in.
+  await requireLogin();
+
   renderCompanyName();
   renderSessionBar();
   renderDashboard();
